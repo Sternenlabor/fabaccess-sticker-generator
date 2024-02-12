@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FabAccess Sticker Generator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <body>
+        <h1>FabAccess Sticker Generator</h1>
+        <div id="fabaccess-sticker-generator">
+            <fabaccess-preview-box value="" size="25"></fabaccess-preview-box>
+
+            <fabaccess-settings-form></fabaccess-settings-form>
+
+            <div class="download-buttons">
+                <button id="download-qr-code-svg">Download QR Code as SVG</button>
+                <button id="download-qr-code-png">Download QR Code as PNG</button>
+                <button id="add-qr-code-to-page">Add QR Code to PDF</button>
+                <button id="download-pdf">Download PDF</button>
+            </div>
+
+            <fabaccess-pdf-viewer></fabaccess-pdf-viewer>
+        </div>
+    </body>
+    <script defer src="/src/PreviewBox.mjs" type="module"></script>
+    <script defer src="/src/SettingsForm.mjs" type="module"></script>
+    <script defer src="/src/PDFViewer.mjs" type="module"></script>
+    <script defer src="index.mjs" type="module"></script>
+</html>

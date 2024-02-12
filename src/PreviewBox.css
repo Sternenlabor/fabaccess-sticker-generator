@@ -1,0 +1,56 @@
+:host {
+    display: block;
+}
+
+#box {
+    background: url('data:image/gif;base64,R0lGODlhBgAGAIAAAO7u7t7e3iH5BAAAAAAALAAAAAAGAAYAAAIKhIOXgKGuDIOzAAA7') #eeeff1;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#box::before {
+    content: 'Preview';
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 12px;
+    height: 30px;
+    width: 100%;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#box svg {
+    max-width: calc(100% - 40px);
+    max-height: 100%;
+    margin: 30px 20px 0 20px;
+}
+
+@media (min-width: 620px) {
+    #box svg {
+        max-height: calc(100% - 40px);
+        margin: 50px 20px 20px 20px;
+    }
+}
+
+@media (min-width: 900px) {
+    #box svg {
+        max-height: 100%;
+        margin: 30px 20px 0 20px;
+    }
+}

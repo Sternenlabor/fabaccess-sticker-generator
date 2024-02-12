@@ -1,0 +1,118 @@
+.toolbar {
+    position: relative;
+    height: 30px;
+    width: 100%;
+    background-color: var(--secondary-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+:is(#print)::before {
+    -webkit-mask-image: var(--toolbar-button-print-icon);
+    mask-image: var(--toolbar-button-print-icon);
+}
+
+:is(#download)::before {
+    -webkit-mask-image: var(--toolbar-button-download-icon);
+    mask-image: var(--toolbar-button-download-icon);
+}
+
+#prev::before {
+    -webkit-mask-image: var(--toolbar-button-pageUp-icon);
+    mask-image: var(--toolbar-button-pageUp-icon);
+}
+
+#next::before {
+    -webkit-mask-image: var(--toolbar-button-pageDown-icon);
+    mask-image: var(--toolbar-button-pageDown-icon);
+}
+
+.toolbar-button::before {
+    opacity: var(--toolbar-icon-opacity);
+    top: 6px;
+    left: 6px;
+    position: absolute;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    content: '';
+    background-color: var(--toolbar-icon-bg-color);
+    -webkit-mask-size: cover;
+    mask-size: cover;
+}
+.toolbar-button {
+    position: relative;
+    outline: none;
+    font: message-box;
+    float: var(--inline-start);
+    min-width: 16px;
+    margin: 2px 1px;
+    padding: 2px 6px 0;
+    border: none;
+    border-radius: 2px;
+    color: var(--main-color);
+    font-size: 12px;
+    line-height: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: #3c474d;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.toolbar-button > span {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.toolbar-button:is(:hover, :focus-visible) {
+    background-color: var(--secondary-color-light);
+}
+
+#pdf-title {
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 12px;
+}
+
+#prev {
+    margin-left: 6px;
+}
+
+#next {
+    margin-right: 6px;
+}
+
+#npages {
+    margin-right: auto;
+    color: var(--toolbar-fg-color);
+    opacity: var(--toolbar-icon-opacity);
+    font-size: 12px;
+}
+
+#print {
+    margin-left: auto;
+}
+
+#download {
+    margin-left: auto;
+    margin-right: 6px;
+}
+
+canvas {
+    width: calc(100% - 2px);
+    border: var(--secondary-color) 1px solid;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top: none;
+}

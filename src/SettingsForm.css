@@ -1,0 +1,90 @@
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
+input,
+select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    outline-color: var(--primary-color);
+    outline-width: 1px;
+    border: var(--secondary-color) 1px solid;
+    background-color: #fff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border: 1px solid var(--primary-color) !important;
+    box-shadow: 0 0 3px var(--primary-color) !important;
+    -moz-box-shadow: 0 0 3px var(--primary-color) !important;
+    -webkit-box-shadow: 0 0 3px var(--primary-color) !important;
+    outline-offset: 0px !important;
+    outline: none !important;
+}
+
+input:-moz-focusring,
+select:-moz-focusring {
+    outline: var(--primary-color) solid 1px;
+}
+
+select {
+    display: block;
+    width: 9em;
+    font-size: 11px;
+    padding: 0.25em 0.2em;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    display: inline-block;
+    font-size: 12px;
+    height: 1em;
+    overflow: visible;
+    width: 1em;
+    content: url("data:image/svg+xml,%0A%3Csvg style='width: 1em; height: 1em; vertical-align: middle;' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M894.973949 322.308432a24.8 24.8 0 1 0 35.071884-35.073108 24.8 24.8 0 1 0-35.071884 35.073108Z' /%3E%3Cpath d='M114.9 291.4l-35.3 35.3 422.5 422.5 427.6-427.7-30.6-30.6h-7.8L502.9 679.4z' /%3E%3Cpath d='M79.547924 326.565605a24.8 24.8 0 1 0 35.071885-35.073108 24.8 24.8 0 1 0-35.071885 35.073108Z' /%3E%3C/svg%3E");
+    position: absolute;
+    right: 15px;
+    top: 14px;
+    pointer-events: none; /* Ensures the click event passes through to the select element */
+}
+
+option {
+    padding: 0.25em 0.2em;
+}
+
+#optimize-for-laser-printer {
+    grid-row: 3;
+    grid-column: 2;
+}
+
+.form-group {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: calc(100% - 20px);
+}

@@ -1,0 +1,140 @@
+:root {
+    --primary-color: #00d4aa;
+    --secondary-color: #3c474d;
+    --primary-color-dark: color-mix(in srgb, var(--primary-color), black 20%);
+    --primary-color-light: color-mix(in srgb, var(--primary-color), white 20%);
+    --secondary-color-dark: color-mix(in srgb, var(--secondary-color), black 20%);
+    --secondary-color-light: color-mix(in srgb, var(--secondary-color), white 20%);
+    /*
+    --primary-color-print: oklch(from var(--primary-color) calc(l + 0.22) calc(c + 0.04) calc(h - 10));
+    --secondary-color-print: oklch(from var(--secondary-color) calc(l + 0.07) c calc(h - 30));
+    */
+    --primary-color-print: #49ffdb;
+    --secondary-color-print: #3f4c4e;
+    --inline-start: left;
+    --main-color: rgb(249 249 250);
+    --toolbar-button-print-icon: url(/images/toolbar-button-print.svg);
+    --toolbar-button-download-icon: url(/images/toolbar-button-download.svg);
+    --toolbar-button-pageUp-icon: url(/images/toolbar-button-pageUp.svg);
+    --toolbar-button-pageDown-icon: url(/images/toolbar-button-pageDown.svg);
+    --toolbar-icon-opacity: 0.7;
+    --toolbar-icon-bg-color: rgb(255 255 255);
+    --toolbar-fg-color: rgb(255 255 255);
+    --button-hover-color: rgb(102 102 103);
+}
+
+html {
+    background-color: var(--secondary-color);
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: var(--secondary-color);
+}
+
+h1 {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto 0 auto;
+    text-align: left;
+    text-indent: -15px;
+    color: var(--primary-color);
+    font-size: 14px;
+}
+
+fabaccess-preview-box {
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+#fabaccess-sticker-generator {
+    float: none;
+    width: auto;
+    width: 80%;
+    max-width: 900px;
+    margin: 5px auto 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.download-buttons {
+    margin: 20px 0;
+}
+
+.download-buttons button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.download-buttons button:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (min-width: 620px) {
+    fabaccess-preview-box {
+        height: 300px;
+    }
+}
+
+@media (min-width: 900px) {
+    #fabaccess-sticker-generator {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+    }
+
+    fabaccess-preview-box {
+        grid-row: 1 / span 2;
+        grid-column: 1;
+        height: auto;
+    }
+
+    fabaccess-settings-form {
+        grid-row: 1;
+        grid-column: 2;
+        margin: 0 0 20px 20px;
+    }
+
+    .download-buttons {
+        grid-row: 2;
+        grid-column: 2;
+        margin: 0 0 20px 20px;
+    }
+
+    fabaccess-pdf-viewer {
+        grid-row: 3;
+        grid-column: 1 / span 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    #fabaccess-sticker-generator {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+    }
+}
+
+@media (min-width: 1600px) {
+    #fabaccess-sticker-generator {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
