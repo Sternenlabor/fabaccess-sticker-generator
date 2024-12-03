@@ -5,12 +5,6 @@
     --primary-color-light: color-mix(in srgb, var(--primary-color), white 20%);
     --secondary-color-dark: color-mix(in srgb, var(--secondary-color), black 20%);
     --secondary-color-light: color-mix(in srgb, var(--secondary-color), white 20%);
-    /*
-    --primary-color-print: oklch(from var(--primary-color) calc(l + 0.22) calc(c + 0.04) calc(h - 10));
-    --secondary-color-print: oklch(from var(--secondary-color) calc(l + 0.07) c calc(h - 30));
-    */
-    --primary-color-print: #66ffde;
-    --secondary-color-print: #303d3e;
     --inline-start: left;
     --main-color: rgb(249 249 250);
     --toolbar-button-print-icon: url(/images/toolbar-button-print.svg);
@@ -21,6 +15,13 @@
     --toolbar-icon-bg-color: rgb(255 255 255);
     --toolbar-fg-color: rgb(255 255 255);
     --button-hover-color: rgb(102 102 103);
+
+    --sticker-background-color: #ffffff;
+    --sticker-border-color: #000000;
+    --icon-color: #000000;
+    --qr-code-background-color: #ffffff;
+    --qr-code-foreground-color: #000000;
+    --label-color: #000000;
 }
 
 html {
@@ -35,14 +36,23 @@ body {
     background-color: var(--secondary-color);
 }
 
-h1 {
+main {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
     width: 80%;
     max-width: 900px;
     margin: 20px auto 0 auto;
+}
+
+h1 {
     text-align: left;
     text-indent: -15px;
     color: var(--primary-color);
     font-size: 14px;
+    grid-column: 1;
+    grid-row: 1;
+    margin-left: 20px;
 }
 
 fabaccess-preview-box {
@@ -51,10 +61,10 @@ fabaccess-preview-box {
 }
 
 #fabaccess-sticker-generator {
+    grid-column: 1 / span 2;
+    grid-row: 2;
     float: none;
-    width: auto;
-    width: 80%;
-    max-width: 900px;
+    width: calc(100% - 40px);
     margin: 5px auto 20px auto;
     padding: 20px;
     background-color: white;
@@ -63,7 +73,7 @@ fabaccess-preview-box {
 }
 
 .download-buttons {
-    margin: 20px 0;
+    margin: 0 0 20px 0;
 }
 
 .download-buttons button {
@@ -88,6 +98,58 @@ fabaccess-preview-box {
     gap: 10px;
 }
 
+#settings-button {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    outline: none;
+    font: message-box;
+    float: var(--inline-start);
+    min-width: 16px;
+    margin: 2px 1px;
+    padding: 2px 6px 0;
+    border: none;
+    border-radius: 2px;
+    color: var(--main-color);
+    font-size: 12px;
+    line-height: 14px;
+    user-select: none;
+    box-sizing: border-box;
+    background-color: #3c474d;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: 6px;
+}
+
+#settings-button::before {
+    opacity: var(--toolbar-icon-opacity);
+    top: 6px;
+    left: 6px;
+    position: absolute;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    content: '';
+    background-color: var(--toolbar-icon-bg-color);
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    -webkit-mask-image: url(/images/settings.svg);
+    mask-image: url(/images/settings.svg);
+}
+
+#settings-button > span {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
 @media (min-width: 620px) {
     fabaccess-preview-box {
         height: 300px;
@@ -110,7 +172,8 @@ fabaccess-preview-box {
     fabaccess-settings-form {
         grid-row: 1;
         grid-column: 2;
-        margin: 0 0 20px 20px;
+        margin: 0 0 0 20px;
+        align-self: end;
     }
 
     .download-buttons {
