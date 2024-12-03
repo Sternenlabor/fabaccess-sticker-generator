@@ -7,6 +7,13 @@ const SVG_PIXEL_WIDTH = 197.0
 export default class SVGRenderer {
     static optimizeForPrint = false
 
+    /**
+     * Generates the SVG code for a QR code with the given machine ID and dimensions.
+     * @param {string} machineID - The machine ID to encode in the QR code.
+     * @param {number|string} height - The height of the SVG in pixels or millimeters.
+     * @param {number|null} [width=null] - The width of the SVG in pixels or millimeters (optional).
+     * @returns {string} - The generated SVG code.
+     */
     static getCode(machineID, height, width = null) {
         const data = {
             msg: `urn:fabaccess:resource:${machineID}`,
@@ -27,6 +34,7 @@ export default class SVGRenderer {
             wh += `height="${height}" `
         }
 
+        // Generate the SVG code with placeholders for colors
         let svgCode = `
             <svg version="1.1" viewBox="0 0 ${SVG_PIXEL_WIDTH} ${SVG_PIXEL_HEIGHT}" ${wh} xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                 <path d="m7.35 0c-4.06 0-7.33 3.27-7.33 7.33v23h-0.0197v70.7c0 4.06 3.27 7.33 7.33 7.33h182c4.06 0 7.33-3.27 7.33-7.33v-14.2h0.0197v-79.4c0-4.06-3.27-7.33-7.33-7.33z" 
@@ -55,15 +63,23 @@ export default class SVGRenderer {
         return svgCode
     }
 
+    /**
+     * Downloads the generated SVG code as an SVG file.
+     * @param {string} machineID - The machine ID to encode in the QR code.
+     * @param {number|string} height - The height of the SVG in pixels or millimeters.
+     * @param {number|null} [width=null] - The width of the SVG in pixels or millimeters (optional).
+     */
     static async downloadSVG(machineID, height, width = null) {
         const svgCode = this.getCode(machineID, height, width)
 
         const n = Utils.getFilename('svg')
 
+        // Create a new Blob object with the SVG code
         const b = new Blob([svgCode], {
             type: 'image/svg+xml'
         })
 
+        // Handle file download
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(b, n)
         } else {

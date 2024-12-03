@@ -6,6 +6,7 @@ import { changeDpiBlob } from '/lib/changeDPI/index.js'
 import Utils from '/src/Utils.mjs'
 import SVGRenderer from '/src/SVGRenderer.mjs'
 
+// Constants for rendering
 const DPI = 300.0
 const SVG_PIXEL_HEIGHT = 108.0
 const SVG_PIXEL_WIDTH = 197.0
@@ -16,10 +17,15 @@ const PAGE_MARGIN_Y = 10.0 // mm
 const SPACE_BETWEEN_CODE_AND_LABEL = 4.0 // mm
 
 export default class PDFRenderer {
-    static #qrCodes = []
-    static #pdfDoc = null
-    static #listeners = {}
+    static #qrCodes = [] // Array to store QR code data
+    static #pdfDoc = null // PDF document instance
+    static #listeners = {} // Event listeners
 
+    /**
+     * Adds an event listener for a specific event type.
+     * @param {string} event - The event type to listen for.
+     * @param {Function} callback - The callback function to be called when the event is dispatched.
+     */
     static addEventListener(event, callback) {
         if (!this.#listeners[event]) {
             this.#listeners[event] = []
@@ -27,6 +33,11 @@ export default class PDFRenderer {
         this.#listeners[event].push(callback)
     }
 
+    /**
+     * Removes an event listener for a specific event type.
+     * @param {string} event - The event type for which the listener should be removed.
+     * @param {Function} callback - The callback function to remove from the listeners.
+     */
     static removeEventListener(event, callback) {
         if (!this.#listeners[event]) {
             return
@@ -37,6 +48,10 @@ export default class PDFRenderer {
         }
     }
 
+    /**
+     * Dispatches an event to all registered listeners of the event's type.
+     * @param {Object} event - The event object to dispatch. Should have a 'type' property.
+     */
     static dispatchEvent(event) {
         if (!this.#listeners[event.type]) {
             return
@@ -46,30 +61,39 @@ export default class PDFRenderer {
         })
     }
 
+    /**
+     * Adds a QR code to the PDF document.
+     * @param {string} machineID - The machine ID to encode in the QR code.
+     * @param {number|string} size - The size of the QR code in millimeters.
+     */
     static async addToPDF(machineID, size) {
-        const mmHeight = parseFloat(size)
-        const mmWidth = (mmHeight / SVG_PIXEL_HEIGHT) * SVG_PIXEL_WIDTH
+        const mmHeight = parseFloat(size) // Convert size to float
+        const mmWidth = (mmHeight / SVG_PIXEL_HEIGHT) * SVG_PIXEL_WIDTH // Calculate width proportionally
         const inches = mmHeight /* mm */ / 25.4 // There are 25.4 millimeters in an inch
-        const pixelHeight = inches * DPI
-        const pixelWidth = (pixelHeight / SVG_PIXEL_HEIGHT) * SVG_PIXEL_WIDTH
+        const pixelHeight = inches * DPI // Calculate pixel height
+        const pixelWidth = (pixelHeight / SVG_PIXEL_HEIGHT) * SVG_PIXEL_WIDTH // Calculate pixel width
 
-        const height = Math.round(pixelHeight)
-        const width = Math.round(pixelWidth)
+        const height = Math.round(pixelHeight) // Round to nearest integer
+        const width = Math.round(pixelWidth) // Round to nearest integer
 
+        // Generate SVG code for the QR code
         const svgCode = SVGRenderer.getCode(machineID, height, width)
 
+        // Create an offscreen canvas to render the SVG
         const c = new OffscreenCanvas(width, height)
         const ctx = c.getContext('2d')
+        // Use canvg to render SVG to canvas
         const v = await canvg.Canvg.fromString(ctx, svgCode, canvg.presets.offscreen())
 
-        v.resize(width, height, 'xMidYMid meet')
+        v.resize(width, height, 'xMidYMid meet') // Resize the SVG to fit the canvas
 
-        await v.render()
+        await v.render() // Render the SVG onto the canvas
 
-        let b = await c.convertToBlob()
-        b = await changeDpiBlob(b, DPI)
-        const imgData = URL.createObjectURL(b)
+        let b = await c.convertToBlob() // Convert canvas to Blob
+        b = await changeDpiBlob(b, DPI) // Change the DPI of the blob
+        const imgData = URL.createObjectURL(b) // Create a URL for the blob
 
+        // Store QR code data
         this.#qrCodes.push({
             machineID,
             mmHeight,
@@ -79,12 +103,17 @@ export default class PDFRenderer {
             imgData
         })
 
+        // Render the PDF with the new QR code
         this.renderPDF()
     }
 
+    /**
+     * Renders the PDF document with all added QR codes.
+     */
     static async renderPDF() {
-        const compress = 'fast'
+        const compress = 'fast' // Compression option for images
 
+        // Create a new jsPDF document
         this.#pdfDoc = new jspdf.jsPDF({
             orientation: 'portrait',
             unit: 'mm',
@@ -94,47 +123,55 @@ export default class PDFRenderer {
             compressPdf: false
         })
 
-        this.#pdfDoc.setFontSize(9)
-        this.#pdfDoc.setTextColor('#3c474d')
+        this.#pdfDoc.setFontSize(9) // Set font size for labels
+        this.#pdfDoc.setTextColor('#3c474d') // Set text color
 
+        // Get page dimensions
         const pageSize = this.#pdfDoc.internal.pageSize
         const pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
-        const pageWidth = this.#pdfDoc.internal.pageSize.width || this.#pdfDoc.internal.pageSize.getWidth()
+        const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth()
 
+        // Sort QR codes by height
         this.#qrCodes.sort((a, b) => a.mmHeight - b.mmHeight)
 
-        let curX = PAGE_MARGIN_X
-        let curY = PAGE_MARGIN_Y
+        let curX = PAGE_MARGIN_X // Current X position
+        let curY = PAGE_MARGIN_Y // Current Y position
 
         for (let i = 0; i < this.#qrCodes.length; i++) {
             const { machineID, imgData, mmWidth, mmHeight } = this.#qrCodes[i]
 
+            // Add QR code image to PDF
             this.#pdfDoc.addImage(imgData, 'PNG', curX, curY, Math.round(mmWidth), Math.round(mmHeight), undefined, compress)
 
+            // Get dimensions of the machine ID text
             const txtDim = this.#pdfDoc.getTextDimensions(machineID)
 
+            // Add machine ID text below the QR code, centered
             this.#pdfDoc.text(machineID, curX + (mmWidth - txtDim.w) / 2, curY + mmHeight + SPACE_BETWEEN_CODE_AND_LABEL)
 
-            curX += mmWidth + PADDING_BETWEEN_CODES_X
+            curX += mmWidth + PADDING_BETWEEN_CODES_X // Update X position
 
             if (i < this.#qrCodes.length - 1) {
-                // we are not at the end
+                // We are not at the end
                 if (curX + PADDING_BETWEEN_CODES_X + this.#qrCodes[i + 1].mmWidth > pageWidth) {
-                    // next code will not fit on the current line
-                    curX = PAGE_MARGIN_X
-                    curY += mmHeight + SPACE_BETWEEN_CODE_AND_LABEL + txtDim.h + PADDING_BETWEEN_CODES_Y
+                    // Next code will not fit on the current line
+                    curX = PAGE_MARGIN_X // Reset X position
+                    curY += mmHeight + SPACE_BETWEEN_CODE_AND_LABEL + txtDim.h + PADDING_BETWEEN_CODES_Y // Move to next line
                 }
                 if (curY + PADDING_BETWEEN_CODES_Y + this.#qrCodes[i + 1].mmHeight + SPACE_BETWEEN_CODE_AND_LABEL + txtDim.h > pageHeight) {
-                    this.#pdfDoc.addPage()
-                    curX = PAGE_MARGIN_X
-                    curY = PAGE_MARGIN_Y
+                    // Next code will not fit on the current page
+                    this.#pdfDoc.addPage() // Add a new page
+                    curX = PAGE_MARGIN_X // Reset X position
+                    curY = PAGE_MARGIN_Y // Reset Y position
                 }
             }
         }
 
+        // Generate blob from PDF and create URL
         var blobPDF = new Blob([this.#pdfDoc.output('blob')], { type: 'application/pdf' })
         var blobUrl = URL.createObjectURL(blobPDF)
 
+        // Dispatch event with the PDF URL
         this.dispatchEvent(
             new CustomEvent('change', {
                 detail: {
@@ -145,7 +182,10 @@ export default class PDFRenderer {
         )
     }
 
+    /**
+     * Initiates the download of the generated PDF document.
+     */
     static downloadPDF() {
-        this.#pdfDoc?.save(Utils.getFilename('pdf'))
+        this.#pdfDoc?.save(Utils.getFilename('pdf')) // Save the PDF with a generated filename
     }
 }

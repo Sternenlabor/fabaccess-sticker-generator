@@ -1,16 +1,25 @@
 {
-  "name": "fabaccess-sticker-generator",
-  "version": "1.0.0",
-  "description": "FabAccess Sticker Generator",
-  "homepage": "https://fabaccess-sticker-generator.sternenlabor.de/",
-  "main": "index.mjs",
-  "scripts": {
-    "start": "light-server --serve ./"
-  },
-  "author": "André Fiedler",
-  "license": "CC0",
-  "bugs": {
-    "url": "https://github.com/Sternenlabor/fabaccess-sticker-generator/issues"
-  },
-  "dependencies": {}
+    "name": "fabaccess-sticker-generator",
+    "version": "1.0.0",
+    "description": "FabAccess Sticker Generator",
+    "homepage": "https://fabaccess-sticker-generator.sternenlabor.de/",
+    "main": "index.mjs",
+    "scripts": {
+      "start": "npm run lite",
+      "lite": "lite-server"
+    },
+    "author": "André Fiedler",
+    "license": "CC0",
+    "bugs": {
+        "url": "https://github.com/Sternenlabor/fabaccess-sticker-generator/issues"
+    },
+    "devDependencies": {
+        "axios": "^1.7.8",
+        "lite-server": "^2.6.1"
+    },
+    "overrides": {
+        "localtunnel": {
+            "axios": "1.6.2"
+        }
+    }
 }
