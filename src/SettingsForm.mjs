@@ -23,8 +23,9 @@ template.innerHTML = /* html */ `
         </div>
     </div>
 
-        <fabaccess-checkbox id="optimize-for-laser-printer" />Optimize Colors for Laser printing</fabaccess-checkbox>`
-
+    <!--
+    <fabaccess-checkbox id="optimize-for-laser-printer" />Optimize Colors for Laser printing</fabaccess-checkbox>
+    -->
     `
     
 
@@ -57,21 +58,25 @@ class SettingsForm extends HTMLElement {
 
         // Get form elements from the shadow DOM
         const machineIdInput = this.#root.getElementById('machineID')
-        const optimizeForPrint = this.#root.getElementById('optimize-for-laser-printer')
-        const size = this.#root.getElementById('size')
+        //const optimizeForPrintCheckbox = this.#root.getElementById('optimize-for-laser-printer')
+        const sizeSelect = this.#root.getElementById('size')
 
         // Add event listener for input changes
         machineIdInput.addEventListener('keyup', this.#handleInputChange.bind(this), {
             passive: false
         })
 
-        size.addEventListener('change', this.#handleSelectChange.bind(this), {
+        // Add event listener for size selection changes
+        sizeSelect.addEventListener('change', this.#handleSelectChange.bind(this), {
             passive: false
         })
 
-        optimizeForPrint.addEventListener('change', this.#handleCheckboxChange.bind(this), {
+        // Add event listener for checkbox changes
+        /*
+        optimizeForPrintCheckbox.addEventListener('change', this.#handleCheckboxChange.bind(this), {
             passive: false
         })
+        */
 
         // Set focus to the machine ID input after the element is rendered
         setTimeout(() => machineIdInput.focus(), 0)
@@ -155,6 +160,7 @@ class SettingsForm extends HTMLElement {
      * @param {Event} e - The event object.
      * @private
      */
+    /*
     #handleCheckboxChange(e) {
         e.stopPropagation()
         const val = e.detail.checked
@@ -172,6 +178,7 @@ class SettingsForm extends HTMLElement {
             })
         )
     }
+    */
 }
 
 // Define the custom element 'fabaccess-settings-form' associated with the SettingsForm class
