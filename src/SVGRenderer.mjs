@@ -48,6 +48,15 @@ export default class SVGRenderer {
             </svg>
         `
 
+        svgCode = Utils.replace(svgCode, {
+            'var(--sticker-background-color)': Utils.getCssValue('--sticker-background-color'),
+            'var(--sticker-border-color)': Utils.getCssValue('--sticker-border-color'),
+            'var(--icon-color)': Utils.getCssValue('--icon-color'),
+            'var(--qr-code-background-color)': Utils.getCssValue('--qr-code-background-color'),
+            'var(--qr-code-foreground-color)': Utils.getCssValue('--qr-code-foreground-color'),
+            'var(--label-color)': Utils.getCssValue('--label-color')
+        })
+
         return svgCode
     }
 
